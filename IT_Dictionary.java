@@ -8,6 +8,7 @@ so i used binary sarch - Sigmund Sayabo.
 
 public class IT_Dictionary {
 
+
  static String[] data = new String[36];
 // I put the array container here sa public class para ma call siya sa any method and use static. - Sigmund Sayabo.
    
@@ -19,7 +20,9 @@ public class IT_Dictionary {
     
  static String cleanInput ; 
  // ge declare dri kay dli ma access sa displayResult na method - Kenneth Bantayan
- 
+
+ static String[] history = new String[50]; // stores last 50 searches
+static int historyCount = 0; //for search history - Raymondell Morales
  public static void main(String[] args) {
 
     //  mao ni ang hard coded na data tanan.
@@ -77,7 +80,7 @@ data[34] = "Virtual Machine: A software-based simulation of a physical computer.
             System.out.println("==================================================");
             System.out.println("1. Search exact term");
             System.out.println("2. Show random term");
-            System.out.println("3. Feature name");
+            System.out.println("3. Show search history");
             System.out.println("4. Feature name");
             System.out.println("5. Feature name");
             System.out.println("6. Feature name");
@@ -100,7 +103,7 @@ data[34] = "Virtual Machine: A software-based simulation of a physical computer.
                     showRandomTerm();
                     break;
                 case 3:
-                    //Feature();
+                showHistory();
                     break;
                 case 4:
                     //Feature();
@@ -151,6 +154,10 @@ data[34] = "Virtual Machine: A software-based simulation of a physical computer.
 
         // delete spaces. 
       cleanInput = response.trim();
+     
+      if (!cleanInput.equals("1")) {
+    addToHistory(cleanInput); //para ni if mag type ug "1" dili sya ma save sa history instead mag back sya
+} 
 
         
         int resultIndex = BinarySearch(data, cleanInput);
@@ -326,4 +333,43 @@ Ang pasabot sa“distance” kay nagpasabot kung unsa kapareho ang duha ka strin
     }
  }
 
+
+
+//---------------------------------------------------------------------------------------------
+
+/*Methods ni sa Search History
+
+Raymondell Morales*/
+
+public static void addToHistory(String term) {
+
+    // para ni di mag balik balik ang mulabas sa history - Morales
+    if (historyCount > 0 && history[historyCount - 1].equalsIgnoreCase(term)) {
+        return;
+    }
+
+    if (historyCount < history.length) {
+        history[historyCount] = term;
+        historyCount++;
+    } else {
+        // 
+        for (int i = 1; i < history.length; i++) {
+            history[i - 1] = history[i];
+        }
+        history[history.length - 1] = term;
+    }
 }
+
+public static void showHistory() {
+    System.out.println("===== SEARCH HISTORY =====");
+
+    if (historyCount == 0) {
+        System.out.println("No searches yet.");
+        return;
+    }
+
+    for (int i = 0; i < historyCount; i++) {
+        System.out.println((i + 1) + ". " + history[i]);
+    }
+}
+}   
